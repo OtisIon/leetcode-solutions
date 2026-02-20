@@ -1,43 +1,31 @@
 // Name: Rohit Mishra
 
 /*
-Add two numbers represented as reversed linked lists.
+Find length of longest substring without repeating characters.
 
 Example:
-l1 = [2,4,3], l2 = [5,6,4]
-Output: [7,0,8]
+Input: "abcabcbb"
+Output: 3
 */
 
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int val) { this.val = val; }
-}
+import java.util.HashSet;
 
 class Solution {
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode dummy = new ListNode(0); // dummy head
-        ListNode current = dummy;
-        int carry = 0;
+    public int lengthOfLongestSubstring(String s) {
+        HashSet<Character> set = new HashSet<>(); // store current window
+        int left = 0, maxLength = 0;
 
-        while (l1 != null || l2 != null || carry != 0) {
-            int sum = carry; // start with carry
-
-            if (l1 != null) {
-                sum += l1.val; // add l1 value
-                l1 = l1.next;
+        for (int right = 0; right < s.length(); right++) {
+            
+            while (set.contains(s.charAt(right))) {
+                set.remove(s.charAt(left)); // remove from left
+                left++;
             }
 
-            if (l2 != null) {
-                sum += l2.val; // add l2 value
-                l2 = l2.next;
-            }
-
-            carry = sum / 10; // update carry
-            current.next = new ListNode(sum % 10); // store digit
-            current = current.next;
+            set.add(s.charAt(right)); // add new char
+            maxLength = Math.max(maxLength, right - left + 1); // update max
         }
 
-        return dummy.next; // skip dummy
+        return maxLength;
     }
 }
